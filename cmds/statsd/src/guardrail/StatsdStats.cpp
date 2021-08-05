@@ -452,6 +452,9 @@ void StatsdStats::noteAtomLogged(int atomId, int32_t timeSec) {
     if (atomId <= android::util::kMaxPushedAtomId) {
         mPushedAtomStats[atomId]++;
     } else {
+        if (atomId < 0) {
+            android_errorWriteLog(0x534e4554, "187957589");
+        }        
         if (mNonPlatformPushedAtomStats.size() < kMaxNonPlatformPushedAtoms) {
             mNonPlatformPushedAtomStats[atomId]++;
         }
