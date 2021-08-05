@@ -618,20 +618,21 @@ public class PermissionManagerService {
         }
 
         final int callingUid = Binder.getCallingUid();
-        final int userId = UserHandle.getUserId(newPackage.applicationInfo.uid);
-        int numRequestedPermissions = newPackage.requestedPermissions.size();
-        for (int i = 0; i < numRequestedPermissions; i++) {
-            PermissionInfo permInfo = getPermissionInfo(newPackage.requestedPermissions.get(i),
-                    newPackage.packageName, 0, callingUid);
-            if (permInfo == null || !STORAGE_PERMISSIONS.contains(permInfo.name)) {
-                continue;
-            }
 
-            EventLog.writeEvent(0x534e4554, "171430330", newPackage.applicationInfo.uid,
-                    "Revoking permission " + permInfo.name + " from package "
-                            + newPackage.packageName + " as either the sdk downgraded "
-                            + downgradedSdk + " or newly requested legacy full storage "
-                            + newlyRequestsLegacy);
+        for (int userId: mUserManagerInt.getUserIds()) {
+            int numRequestedPermissions = newPackage.requestedPermissions.size();
+            for (int i = 0; i < numRequestedPermissions; i++) {
+                PermissionInfo permInfo = getPermissionInfo(newPackage.requestedPermissions.get(i),
+                        newPackage.packageName, 0, callingUid);
+                if (permInfo == null || !STORAGE_PERMISSIONS.contains(permInfo.name)) {
+                    continue;
+                }
+
+                EventLog.writeEvent(0x534e4554, "171430330", newPackage.applicationInfo.uid,
+                        "Revoking permission " + permInfo.name + " from package "
+                                + newPackage.packageName + " as either the sdk downgraded "
+                                + downgradedSdk + " or newly requested legacy full storage "
+                                + newlyRequestsLegacy);
 
                 try {
                     revokeRuntimePermission(permInfo.name, newPackage.packageName,
@@ -640,6 +641,7 @@ public class PermissionManagerService {
                     Log.e(TAG, "unable to revoke " + permInfo.name + " for "
                             + newPackage.packageName + " user " + userId, e);
                 }
+            }
         }
 
     }

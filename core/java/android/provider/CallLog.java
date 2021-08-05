@@ -101,6 +101,13 @@ public class CallLog {
         public static final String LIMIT_PARAM_KEY = "limit";
 
         /**
+         * Form of {@link #CONTENT_URI} which limits the query results to a single result.
+         */
+        private static final Uri CONTENT_URI_LIMIT_1 = CONTENT_URI.buildUpon()
+                .appendQueryParameter(LIMIT_PARAM_KEY, "1")
+                .build();
+
+        /**
          * Query parameter used to specify the starting record to return.
          * <p>
          * TYPE: integer
