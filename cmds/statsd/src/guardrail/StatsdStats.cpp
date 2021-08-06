@@ -449,7 +449,7 @@ void StatsdStats::notePullExceedMaxDelay(int pullAtomId) {
 void StatsdStats::noteAtomLogged(int atomId, int32_t timeSec) {
     lock_guard<std::mutex> lock(mLock);
 
-    if (atomId <= android::util::kMaxPushedAtomId) {
+    if (atomId >= 0 && atomId <= kMaxPushedAtomId) {
         mPushedAtomStats[atomId]++;
     } else {
         if (atomId < 0) {
