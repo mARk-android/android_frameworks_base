@@ -938,11 +938,11 @@ public class CallLog {
             Cursor c = null;
             try {
                 c = resolver.query(
-                    CONTENT_URI,
+                    CONTENT_URI_LIMIT_1,
                     new String[] {NUMBER},
                     TYPE + " = " + OUTGOING_TYPE,
                     null,
-                    DEFAULT_SORT_ORDER + " LIMIT 1");
+                    DEFAULT_SORT_ORDER);
                 if (c == null || !c.moveToFirst()) {
                     return "";
                 }

@@ -6486,10 +6486,7 @@ public class PackageManagerService extends IPackageManager.Stub
 
     @Override
     public List<String> getAllPackages() {
-        // Allow iorapd to call this method.
-        if (Binder.getCallingUid() != Process.IORAPD_UID) {
-            enforceSystemOrRootOrShell("getAllPackages is limited to privileged callers");
-        }
+        enforceSystemOrRootOrShell("getAllPackages is limited to privileged callers");
         final int callingUid = Binder.getCallingUid();
         final int callingUserId = UserHandle.getUserId(callingUid);
         synchronized (mPackages) {
